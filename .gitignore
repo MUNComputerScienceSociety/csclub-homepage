@@ -1,0 +1,8 @@
+# editor junk
+*.swp
+
+# potentially large files / not web content
+archive/*
+assets/*
+tutorials/*
+workshops/*
