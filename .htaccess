@@ -1,14 +1,10 @@
 # Always HTTPs!
-
 RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R]
 
 # Custom Directory Views
-
 IndexOptions IgnoreCase FancyIndexing FoldersFirst SuppressHTMLPreamble
-
 IndexIgnore .htaccess favicon.ico listing_header.html listing_footer.html listing_cs_logo.png
-
 HeaderName listing_header.html
 ReadmeName listing_footer.html
