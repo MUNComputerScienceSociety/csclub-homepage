@@ -1,21 +1,14 @@
+# Always HTTPs!
+
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R]
+
 # Custom Directory Views
 
-# SET INDEX OPTIONS 
 IndexOptions IgnoreCase FancyIndexing FoldersFirst SuppressHTMLPreamble
 
-# IGNORE THESE FILES
 IndexIgnore .htaccess favicon.ico listing_header.html listing_footer.html listing_cs_logo.png
 
-# SPECIFY HEADER FILE
 HeaderName listing_header.html
-
-# SPECIFY FOOTER FILE
 ReadmeName listing_footer.html
-
-# FOLDER DESCRIPTIONS
-#AddDescription "<span class='description'>Private Directory</span>" transfer
-
-# SPECIFY CUSTOM ICONS
-#AddIcon _001.gif .txt .pdf .zip .jpg .jpeg .jpe .JPG .png .gif .mp3 .rar .mpg .indd .psd .tar .tif .html .htm .css .doc .log .js .ico, .eml
-#AddIcon _002.gif ^^DIRECTORY^^
-#AddIcon _003.gif *.
