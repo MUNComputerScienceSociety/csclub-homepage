@@ -2,6 +2,7 @@
 *.swp
 
 # potentially large files / not web content
+executive-documents/*
 archive/*
 assets/*
 tutorials/*
