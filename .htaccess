@@ -8,3 +8,7 @@ IndexOptions IgnoreCase FancyIndexing FoldersFirst SuppressHTMLPreamble
 IndexIgnore .htaccess favicon.ico listing_header.html listing_footer.html listing_cs_logo.png
 HeaderName listing_header.html
 ReadmeName listing_footer.html
+
+# CORS
+Header add Access-Control-Allow-Origin "*"
+Header add Access-Control-Allow-Methods: "GET,POST,OPTIONS,DELETE,PUT"
