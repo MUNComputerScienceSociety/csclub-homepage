@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>picoCAD</title>
+    <style>
+:root {
+    --black: #000000;
+    --navy: #1D2B53;
+    --purple: #7E2553;
+    --darkgreen: #008751;
+    --brown: #AB5236;
+    --darkbrown: #5F574F;
+    --darkgrey: #C2C3C7;
+    --white : #FFF1E8;
+    --red: #FF004D;
+    --orange: #FFA300;
+    --yellow: #FFEC27;
+    --green: #00E436;
+    --blue: #29ADFF;
+    --darkblue: #83769C;
+    --pink: #FF77A8;
+    --lightbrown: #FFCCAA;
+}
+
+@font-face {
+  font-family: "PICO-8 mono";
+  src: url("./font/PICO-8-mono.woff2") format("woff2"),
+    url("./font/PICO-8-mono.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+    font-family: "PICO-8 mono", monospace;
+    color: var(--black);
+}
+
+body {
+    background-color: var(--lightbrown);
+    padding: 0 10rem;
+}
+
+a {
+    color: var(--navy);
+}
+
+a:hover {
+    color: var(--darkblue);
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+#drawings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.drawing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    line-height: 2rem;
+    width: 70%;
+    margin: 1rem 0;
+    padding: 0.25rem 2rem;
+}
+
+    </style>
+</head>
+<body>
+    <main>
+        <h1>picoCAD</h1>
+        <h2>misc. pieces of art done in <a href="https://johanpeitz.itch.io/picocad">picoCAD</a>, by member of the society</h2>
+        <div id="drawings"></div>
+    </main>
+
+    <script src="./pico-cad-viewer.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        const VIEWER_OPTIONS = {
+            fov: 45, 
+            renderMode: "texture",
+            cameraPos: { x: 0, y: 1.5, z: 0 },
+        };
+
+        let drawingsElm;
+
+        async function drawing({ title, textColor = "black", backgroundColor = "white", dateMade, madeBy, viewerOptions = VIEWER_OPTIONS }) {
+            console.log(`adding '${title}' (${dateMade}) by ${madeBy.name} (${madeBy.url})`);
+
+            const txt = await fetch(`./drawings/${title}.txt`).then(r => r.text());
+
+            const containerElm = document.createElement('div');
+            containerElm.style.backgroundColor = `var(--${backgroundColor})`;
+            containerElm.classList.add('drawing');
+
+            const titleElm = document.createElement('h3');
+            titleElm.style.color = `var(--${textColor})`;
+            titleElm.innerText = `'${title}', by ${madeBy.name}`;
+            containerElm.appendChild(titleElm);
+
+            const canvasElm = document.createElement('canvas');
+            containerElm.appendChild(canvasElm);
+
+            const viewer = new PicoCadViewer({
+                canvas: canvasElm,
+                resolution: {
+                    width: 256,
+                    height: 256,
+                },
+                fov: viewerOptions.fov,
+                renderMode: viewerOptions.renderMode,
+            });
+
+            viewer.load(txt);
+
+            let spin = 0;
+            viewer.startDrawLoop((dt) => {
+                spin += dt;
+                viewer.setTurntableCamera(8, spin, 0.1, viewerOptions.cameraPos);
+                viewer.setLightDirectionFromCamera();
+            });
+
+            drawingsElm.appendChild(containerElm);
+        }
+
+        const people = {
+            jack: { name: "Jack Harrhy", url: "https://jackharrhy.dev" },
+            ethan: { name: "Ethan Crann", url: "https://github.com/thecrypticcanadian" },
+        };
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+            drawingsElm = document.getElementById('drawings');
+
+            /*
+            drawing({
+                title: "amongus",
+                textColor: "white",
+                backgroundColor: "navy",
+                dateMade: new Date(2022, 1, 5),
+                madeBy: people.ethan,
+                viewerOptions: {
+                    fov: 35,
+                    renderMode: "color",
+                    cameraPos: { x: 0, y: 0.7, z: 0 },
+                },
+            });
+            */
+
+            drawing({
+                title: "cuppa",
+                dateMade: new Date(2022, 1, 5),
+                madeBy: people.jack,
+                viewerOptions: {
+                    fov: 22,
+                    cameraPos: { x: 0, y: 0.6, z: 0 },
+                },
+            });
+        });
+    </script>
+</body>
+</html>
