@@ -39,7 +39,7 @@
 }
 
 body {
-    background-color: var(--lightbrown);
+    background-color: var(--purple);
     padding: 0 10rem;
 }
 
@@ -92,7 +92,7 @@ h1, h2 {
 
         let drawingsElm;
 
-        async function drawing({ title, textColor = "black", backgroundColor = "white", dateMade, madeBy, viewerOptions = VIEWER_OPTIONS }) {
+        async function drawing({ title, textColor = "black", backgroundColor = "white", dateMade, madeBy, cameraRadius = 8, viewerOptions = VIEWER_OPTIONS }) {
             console.log(`adding '${title}' (${dateMade}) by ${madeBy.name} (${madeBy.url})`);
 
             const txt = await fetch(`./drawings/${title}.txt`).then(r => r.text());
@@ -112,8 +112,9 @@ h1, h2 {
             const viewer = new PicoCadViewer({
                 canvas: canvasElm,
                 resolution: {
-                    width: 256,
-                    height: 256,
+                    width: 90,
+                    height: 90,
+                    scale: 4,
                 },
                 fov: viewerOptions.fov,
                 renderMode: viewerOptions.renderMode,
@@ -124,7 +125,7 @@ h1, h2 {
             let spin = 0;
             viewer.startDrawLoop((dt) => {
                 spin += dt;
-                viewer.setTurntableCamera(8, spin, 0.1, viewerOptions.cameraPos);
+                viewer.setTurntableCamera(cameraRadius, spin, 0.1, viewerOptions.cameraPos);
                 viewer.setLightDirectionFromCamera();
             });
 
@@ -134,12 +135,26 @@ h1, h2 {
         const people = {
             jack: { name: "Jack Harrhy", url: "https://jackharrhy.dev" },
             ethan: { name: "Ethan Crann", url: "https://github.com/thecrypticcanadian" },
+            david: { name: "David Chicas", url: "https://davidchicas.me/" },
         };
 
-        window.addEventListener('DOMContentLoaded', (event) => {
+        window.addEventListener('DOMContentLoaded', async (event) => {
             drawingsElm = document.getElementById('drawings');
 
-            drawing({
+            await drawing({
+                title: "sword",
+                backgroundColor: "lightbrown",
+                dateMade: new Date(2022, 1, 5),
+                madeBy: people.david,
+                cameraRadius: 20,
+                viewerOptions: {
+                    fov: 45,
+                    renderMode: "color",
+                    cameraPos: { x: 0, y: 3, z: 0 },
+                },
+            });
+
+            await drawing({
                 title: "amongus",
                 textColor: "white",
                 backgroundColor: "navy",
@@ -152,7 +167,7 @@ h1, h2 {
                 },
             });
 
-            drawing({
+            await drawing({
                 title: "cuppa",
                 dateMade: new Date(2022, 1, 5),
                 madeBy: people.jack,
