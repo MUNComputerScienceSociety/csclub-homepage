@@ -1,0 +1,75 @@
+{
+  "people": {
+    "jack": {
+      "name": "Jack Harrhy",
+      "url": "https://jackharrhy.dev"
+    },
+    "ethan": {
+      "name": "Ethan Crann",
+      "url": "https://github.com/thecrypticcanadian"
+    },
+    "david": {
+      "name": "David Chicas",
+      "url": "https://davidchicas.me/"
+    }
+  },
+  "drawings": [
+    {
+      "title": "cuppa",
+      "dateMade": {
+        "year": 2022,
+        "month": 2,
+        "day": 5
+      },
+      "madeBy": "jack",
+      "viewerOptions": {
+        "fov": 22,
+        "cameraPos": {
+          "x": 0,
+          "y": 0.6,
+          "z": 0
+        }
+      }
+    },
+    {
+      "title": "amongus",
+      "textColor": "white",
+      "backgroundColor": "navy",
+      "dateMade": {
+        "year": 2022,
+        "month": 2,
+        "day": 5
+      },
+      "madeBy": "ethan",
+      "viewerOptions": {
+        "fov": 35,
+        "renderMode": "color",
+        "cameraPos": {
+          "x": 0,
+          "y": 0.7,
+          "z": 0
+        }
+      }
+    },
+    {
+      "title": "sword",
+      "backgroundColor": "lightbrown",
+      "dateMade": {
+        "year": 2022,
+        "month": 2,
+        "day": 5
+      },
+      "madeBy": "david",
+      "cameraRadius": 20,
+      "viewerOptions": {
+        "fov": 45,
+        "renderMode": "color",
+        "cameraPos": {
+          "x": 0,
+          "y": 3,
+          "z": 0
+        }
+      }
+    }
+  ]
+}

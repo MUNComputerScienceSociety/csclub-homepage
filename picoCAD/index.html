@@ -90,92 +90,62 @@ h1, h2 {
             cameraPos: { x: 0, y: 1.5, z: 0 },
         };
 
-        let drawingsElm;
-
-        async function drawing({ title, textColor = "black", backgroundColor = "white", dateMade, madeBy, cameraRadius = 8, viewerOptions = VIEWER_OPTIONS }) {
-            console.log(`adding '${title}' (${dateMade}) by ${madeBy.name} (${madeBy.url})`);
-
-            const txt = await fetch(`./drawings/${title}.txt`).then(r => r.text());
-
-            const containerElm = document.createElement('div');
-            containerElm.style.backgroundColor = `var(--${backgroundColor})`;
-            containerElm.classList.add('drawing');
-
-            const titleElm = document.createElement('h3');
-            titleElm.style.color = `var(--${textColor})`;
-            titleElm.innerText = `'${title}', by ${madeBy.name}`;
-            containerElm.appendChild(titleElm);
-
-            const canvasElm = document.createElement('canvas');
-            containerElm.appendChild(canvasElm);
-
-            const viewer = new PicoCadViewer({
-                canvas: canvasElm,
-                resolution: {
-                    width: 90,
-                    height: 90,
-                    scale: 4,
-                },
-                fov: viewerOptions.fov,
-                renderMode: viewerOptions.renderMode,
-            });
-
-            viewer.load(txt);
-
-            let spin = 0;
-            viewer.startDrawLoop((dt) => {
-                spin += dt;
-                viewer.setTurntableCamera(cameraRadius, spin, 0.1, viewerOptions.cameraPos);
-                viewer.setLightDirectionFromCamera();
-            });
-
-            drawingsElm.appendChild(containerElm);
-        }
-
-        const people = {
-            jack: { name: "Jack Harrhy", url: "https://jackharrhy.dev" },
-            ethan: { name: "Ethan Crann", url: "https://github.com/thecrypticcanadian" },
-            david: { name: "David Chicas", url: "https://davidchicas.me/" },
-        };
-
         window.addEventListener('DOMContentLoaded', async (event) => {
-            drawingsElm = document.getElementById('drawings');
+            const drawingsElm = document.getElementById('drawings');
 
-            await drawing({
-                title: "sword",
-                backgroundColor: "lightbrown",
-                dateMade: new Date(2022, 1, 5),
-                madeBy: people.david,
-                cameraRadius: 20,
-                viewerOptions: {
-                    fov: 45,
-                    renderMode: "color",
-                    cameraPos: { x: 0, y: 3, z: 0 },
-                },
-            });
+            const { people, drawings } = await fetch('./data.json').then(r => r.json());
 
-            await drawing({
-                title: "amongus",
-                textColor: "white",
-                backgroundColor: "navy",
-                dateMade: new Date(2022, 1, 5),
-                madeBy: people.ethan,
-                viewerOptions: {
-                    fov: 35,
-                    renderMode: "color",
-                    cameraPos: { x: 0, y: 0.7, z: 0 },
-                },
-            });
+            console.log(`found ${Object.keys(people).length} people, and ${drawings.length} drawings from data.json`);
 
-            await drawing({
-                title: "cuppa",
-                dateMade: new Date(2022, 1, 5),
-                madeBy: people.jack,
-                viewerOptions: {
-                    fov: 22,
-                    cameraPos: { x: 0, y: 0.6, z: 0 },
-                },
-            });
+            async function draw({ title, textColor = "black", backgroundColor = "white", dateMade, madeBy, cameraRadius = 8, viewerOptions = VIEWER_OPTIONS }) {
+                const person = people[madeBy];
+
+                console.log(people, madeBy)
+
+                const date = new Date(dateMade.year, dateMade.month, dateMade.day);
+
+                console.log(`adding '${title}' (${date}) by ${person.name} (${person.url})`);
+
+                const txt = await fetch(`./drawings/${title}.txt`).then(r => r.text());
+
+                const containerElm = document.createElement('div');
+                containerElm.style.backgroundColor = `var(--${backgroundColor})`;
+                containerElm.classList.add('drawing');
+
+                const titleElm = document.createElement('h3');
+                titleElm.style.color = `var(--${textColor})`;
+                titleElm.innerText = `'${title}', by ${person.name}`;
+                containerElm.appendChild(titleElm);
+
+                const canvasElm = document.createElement('canvas');
+                containerElm.appendChild(canvasElm);
+
+                const viewer = new PicoCadViewer({
+                    canvas: canvasElm,
+                    resolution: {
+                        width: 90,
+                        height: 90,
+                        scale: 4,
+                    },
+                    fov: viewerOptions.fov,
+                    renderMode: viewerOptions.renderMode,
+                });
+
+                viewer.load(txt);
+
+                let spin = 0;
+                viewer.startDrawLoop((dt) => {
+                    spin += dt;
+                    viewer.setTurntableCamera(cameraRadius, spin, 0.1, viewerOptions.cameraPos);
+                    viewer.setLightDirectionFromCamera();
+                });
+
+                drawingsElm.appendChild(containerElm);
+            }
+
+            for (const drawing of drawings.reverse()) {
+                await draw(drawing);
+            }
         });
     </script>
 </body>
