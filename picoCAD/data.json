@@ -70,6 +70,26 @@
           "z": 0
         }
       }
+    },
+    {
+      "title": "muncs",
+      "textColor": "darkgrey",
+      "backgroundColor": "navy",
+      "dateMade": {
+        "year": 2022,
+        "month": 2,
+        "day": 7
+      },
+      "madeBy": "jack",
+      "cameraRadius": 14,
+      "viewerOptions": {
+        "fov": 20,
+        "cameraPos": {
+          "x": 0,
+          "y": 0.6,
+          "z": 0
+        }
+      }
     }
   ]
 }
